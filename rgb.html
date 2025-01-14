@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bildbetrachter</title>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+        }
+
+        .input-container {
+            width: 30%;
+            padding: 20px;
+            background-color: #f4f4f4;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-container textarea {
+            width: 100%;
+            height: 80%;
+            font-size: 16px;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        .input-container button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .input-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .grid-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #eaeaea;
+        }
+
+        .grid {
+            display: grid;
+            gap: 2px;
+            background-color: #ccc;
+        }
+
+        .grid div {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="input-container">
+        <textarea id="input-values" placeholder="Geben Sie Werte für R, G, B (0-255) ein, getrennt durch Leerzeichen. Drei Werte bestimmen eine Farbe. Jede Zeile entspricht einer Rasterreihe."></textarea>
+        <button onclick="generateGrid()">Raster generieren</button>
+    </div>
+    <div class="grid-container">
+        <div id="grid" class="grid"></div>
+    </div>
+
+    <script>
+        function generateGrid() {
+            const input = document.getElementById('input-values').value.trim();
+            const gridContainer = document.getElementById('grid');
+
+            // Leeren des Rasters
+            gridContainer.innerHTML = '';
+
+            // Aufteilung der Eingabe in Zeilen
+            const rows = input.split('\n').slice(3); // Erste drei Zeilen ignorieren
+            const gridData = rows.map(row => {
+                const values = row.split(' ').map(value => parseFloat(value.trim()));
+                if (values.length % 3 !== 0) {
+                    alert('Jede Zeile muss ein Vielfaches von drei Werten enthalten (R, G, B).');
+                    throw new Error('Ungültige Eingabe');
+                }
+                return values;
+            });
+
+            // Festlegen der Rasterdimensionen
+            const rowCount = gridData.length;
+            const colCount = gridData[0].length / 3; // Jede Zelle besteht aus 3 Werten (R, G, B)
+
+            gridContainer.style.gridTemplateRows = `repeat(${rowCount}, 20px)`; // 20px pro Zeile
+            gridContainer.style.gridTemplateColumns = `repeat(${colCount}, 20px)`; // 20px pro Spalte
+
+            // Erstellen der Rasterzellen
+            gridData.forEach(row => {
+                for (let i = 0; i < row.length; i += 3) {
+                    const r = row[i];
+                    const g = row[i + 1];
+                    const b = row[i + 2];
+
+                    const cell = document.createElement('div');
+                    cell.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+                    gridContainer.appendChild(cell);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
