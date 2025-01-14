@@ -51,7 +51,7 @@
 
         .grid {
             display: grid;
-            grid-gap: 2px;
+            gap: 2px;
             background-color: #ccc;
         }
 
@@ -71,7 +71,7 @@
 </head>
 <body>
     <div class="input-container">
-        <textarea id="input-values" placeholder="Geben Sie Werte zwischen 0 und 1 ein, getrennt durch Kommas. Jede Zeile entspricht einer Rasterreihe."></textarea>
+        <textarea id="input-values" placeholder="Geben Sie Werte zwischen 0 und 1 ein, getrennt durch Leerzeichen. Jede Zeile entspricht einer Rasterreihe."></textarea>
         <button onclick="generateGrid()">Raster generieren</button>
     </div>
     <div class="grid-container">
@@ -87,8 +87,8 @@
             gridContainer.innerHTML = '';
 
             // Aufteilung der Eingabe in Zeilen
-            const rows = input.split('\n');
-            const gridData = rows.map(row => row.split(',').map(value => parseFloat(value.trim())));
+            const rows = input.split('\n').slice(2); // Erste zwei Zeilen ignorieren
+            const gridData = rows.map(row => row.split(' ').map(value => parseFloat(value.trim())));
 
             // Gültigkeitsprüfung
             if (!gridData.every(row => row.every(value => value === 0 || value === 1))) {
@@ -97,8 +97,11 @@
             }
 
             // Festlegen der Rasterdimensionen
-            gridContainer.style.gridTemplateRows = `repeat(${gridData.length}, 1fr)`;
-            gridContainer.style.gridTemplateColumns = `repeat(${gridData[0].length}, 1fr)`;
+            const rowCount = gridData.length;
+            const colCount = gridData[0].length;
+
+            gridContainer.style.gridTemplateRows = `repeat(${rowCount}, 20px)`; // 20px pro Zeile
+            gridContainer.style.gridTemplateColumns = `repeat(${colCount}, 20px)`; // 20px pro Spalte
 
             // Erstellen der Rasterzellen
             gridData.forEach(row => {
