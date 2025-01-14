@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RGB Color Mixer</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+
+        .circle {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            mix-blend-mode: lighten;
+        }
+
+        #circle-red {
+            background-color: rgba(255, 0, 0, 1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-75%, -75%);
+        }
+
+        #circle-green {
+            background-color: rgba(0, 255, 0, 1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-25%, -75%);
+        }
+
+        #circle-blue {
+            background-color: rgba(0, 0, 255, 1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -25%);
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        .slider {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .slider label {
+            width: 50px;
+        }
+
+        .slider input {
+            flex: 1;
+        }
+
+        .slider span {
+            margin-left: 10px;
+            width: 40px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-container">
+        <div id="circle-red" class="circle"></div>
+        <div id="circle-green" class="circle"></div>
+        <div id="circle-blue" class="circle"></div>
+    </div>
+
+    <div class="controls">
+        <div class="slider">
+            <label for="slider-red">Rot:</label>
+            <input id="slider-red" type="range" min="0" max="255" value="255">
+            <span id="value-red">255</span>
+        </div>
+        <div class="slider">
+            <label for="slider-green">Grün:</label>
+            <input id="slider-green" type="range" min="0" max="255" value="255">
+            <span id="value-green">255</span>
+        </div>
+        <div class="slider">
+            <label for="slider-blue">Blau:</label>
+            <input id="slider-blue" type="range" min="0" max="255" value="255">
+            <span id="value-blue">255</span>
+        </div>
+    </div>
+
+    <script>
+        const redCircle = document.getElementById('circle-red');
+        const greenCircle = document.getElementById('circle-green');
+        const blueCircle = document.getElementById('circle-blue');
+
+        const redSlider = document.getElementById('slider-red');
+        const greenSlider = document.getElementById('slider-green');
+        const blueSlider = document.getElementById('slider-blue');
+
+        const redValueDisplay = document.getElementById('value-red');
+        const greenValueDisplay = document.getElementById('value-green');
+        const blueValueDisplay = document.getElementById('value-blue');
+
+        function updateCircles() {
+            const redValue = redSlider.value;
+            const greenValue = greenSlider.value;
+            const blueValue = blueSlider.value;
+
+            redCircle.style.backgroundColor = `rgba(255, 0, 0, ${redValue / 255})`;
+            greenCircle.style.backgroundColor = `rgba(0, 255, 0, ${greenValue / 255})`;
+            blueCircle.style.backgroundColor = `rgba(0, 0, 255, ${blueValue / 255})`;
+
+            redValueDisplay.textContent = redValue;
+            greenValueDisplay.textContent = greenValue;
+            blueValueDisplay.textContent = blueValue;
+        }
+
+        redSlider.addEventListener('input', updateCircles);
+        greenSlider.addEventListener('input', updateCircles);
+        blueSlider.addEventListener('input', updateCircles);
+
+        // Initial update
+        updateCircles();
+    </script>
+</body>
+</html>
