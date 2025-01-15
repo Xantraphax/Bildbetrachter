@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Editor</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .editor-container {
+            display: flex;
+            flex: 1;
+        }
+
+        .input-area, .output-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .input-area {
+            background-color: #f0f0f0;
+            border-right: 2px solid #ccc;
+        }
+
+        .output-area {
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        textarea {
+            flex: 1;
+            width: 100%;
+            resize: none;
+            padding: 10px;
+            box-sizing: border-box;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .output-svg {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="editor-container">
+        <!-- Eingabefeld -->
+        <div class="input-area">
+            <textarea id="svg-input" placeholder="SVG Code hier eingeben..."></textarea>
+        </div>
+
+        <!-- Zeichenfläche -->
+        <div class="output-area">
+            <div id="svg-output" class="output-svg"></div>
+        </div>
+    </div>
+
+    <script>
+        const svgInput = document.getElementById('svg-input');
+        const svgOutput = document.getElementById('svg-output');
+
+        // Funktion zur Aktualisierung des SVG-Outputs
+        function updateSvg() {
+            const svgCode = svgInput.value;
+
+            // Versuche, den SVG-Code zu rendern
+            try {
+                // Erstellen und Anhängen der SVG
+                svgOutput.innerHTML = svgCode;
+
+                // Validierung: Wenn das Ergebnis kein SVG-Element ist, wird ein Fehler angezeigt
+                const svgElement = svgOutput.querySelector('svg');
+                if (!svgElement) {
+                    throw new Error('Kein gültiger SVG-Code.');
+                }
+            } catch (error) {
+                svgOutput.innerHTML = `<p style="color: red;">Ungültiger SVG-Code: ${error.message}</p>`;
+            }
+        }
+
+        // Aktualisierung bei Eingabe
+        svgInput.addEventListener('input', updateSvg);
+
+        // Start-Inhalt zur Demonstration
+        svgInput.value = `
+<svg height="100" width="200" xmlns="http://www.w3.org/2000/svg">
+    <rect fill="blue" height="60" width="100" x="0" y="0" />
+    <circle cx="50" cy="30" fill="red" r="30" />
+</svg>`;
+        updateSvg();
+    </script>
+</body>
+</html>
