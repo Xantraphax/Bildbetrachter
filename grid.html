@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raster mit Kästchen</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .grid {
+            display: grid;
+            gap: 2px;
+            background-color: #ccc;
+        }
+
+        .grid div {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .grid div.black {
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+    <div id="grid" class="grid"></div>
+
+    <script>
+        // Funktion, um URL-Parameter auszulesen
+        function getParameterByName(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return parseInt(urlParams.get(name)) || 10; // Standardwert: 10
+        }
+
+        // Funktion, um das Raster zu erstellen
+        function createGrid(rows, cols) {
+            const grid = document.getElementById('grid');
+
+            // Grid-Dimensionen setzen
+            grid.style.gridTemplateRows = `repeat(${rows}, 20px)`;
+            grid.style.gridTemplateColumns = `repeat(${cols}, 20px)`;
+
+            // Kästchen erstellen
+            for (let i = 0; i < rows * cols; i++) {
+                const cell = document.createElement('div');
+
+                // Klick-Event für jedes Kästchen
+                cell.addEventListener('click', () => {
+                    cell.classList.toggle('black');
+                });
+
+                grid.appendChild(cell);
+            }
+        }
+
+        // Raster-Dimensionen aus der URL auslesen
+        const rows = getParameterByName('rows');
+        const cols = getParameterByName('cols');
+
+        // Raster erstellen
+        createGrid(rows, cols);
+    </script>
+</body>
+</html>
